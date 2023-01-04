@@ -13,8 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('chat_messages', function (Blueprint $table) {
-            $table->integer('seen')->default(0);
+        Schema::disableForeignKeyConstraints();
+        Schema::create('chats', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('reciever_id')->constrained('users')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('chats');
     }
 };
